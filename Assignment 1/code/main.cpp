@@ -44,35 +44,29 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
                                       float zNear, float zFar)
 {
     // Students will implement this function
-
     float l,r,t,b,n,f;
     float arc = eye_fov / 180 * MY_PI;
-    t = zNear * std::tan(arc/2);
+    t = abs(zNear) * std::tan(arc/2);
     b = -t;
     r = t * aspect_ratio;
     l = -r;
-    n = - zNear;
-    f = - zFar;
+    n = zNear;
+    f = zFar;
     Eigen::Matrix4f projection = Eigen::Matrix4f::Identity();
+    
     Eigen::Matrix4f orthongraphic;
-    orthongraphic << 
-        2/(r - l), 0, 0 , -(l + r)/2,
-        0, 2/(t - b), 0 , -(t + b)/2,
-        0, 0, 2/(n - f) , -(n + f)/2,
+    Eigen::Matrix4f zoom,move;
+    zoom << 
+        2/(r - l), 0, 0 , 0,
+        0, 2/(t - b), 0 , 0,
+        0, 0, 2/(n - f) , 0,
         0, 0, 0 , 1;
-    // the orthongraphic matrix could be computed as follow
-    // Eigen::Matrix4f zoom,move;
-    // zoom << 
-    //     2/(r - l), 0, 0 , 0,
-    //     0, 2/(t - b), 0 , 0,
-    //     0, 0, 2/(n - f) , 0,
-    //     0, 0, 0 , 1;
-    // move << 
-    //     1, 0, 0 , -(l + r)/2,
-    //     0, 1, 0 , -(t + b)/2,
-    //     0, 0, 1 , -(n + f)/2,
-    //     0, 0, 0 , 1;
-    // orthongraphic = zoom * move;
+    move << 
+        1, 0, 0 , -(l + r)/2,
+        0, 1, 0 , -(t + b)/2,
+        0, 0, 1 , -(n + f)/2,
+        0, 0, 0 , 1;
+    orthongraphic = zoom * move;
 
     Eigen::Matrix4f perspctive;
     perspctive << 
@@ -80,14 +74,14 @@ Eigen::Matrix4f get_projection_matrix(float eye_fov, float aspect_ratio,
         0, n, 0 , 0,
         0, 0, n + f , - n * f,
         0, 0, 1 , 0;
-    projection = orthongraphic * perspctive * projection;
+        
+    projection = perspctive * projection;
+    projection = orthongraphic * projection;
+    return projection;
 
     // TODO: Implement this function
     // Create the projection matrix for the given parameters.
     // Then return it.
-
-
-    return projection;
 }
 
 int main(int argc, const char** argv)
@@ -129,7 +123,7 @@ int main(int argc, const char** argv)
 
         r.set_model(get_model_matrix(angle));
         r.set_view(get_view_matrix(eye_pos));
-        r.set_projection(get_projection_matrix(45, 1, 0.1, 50));
+        r.set_projection(get_projection_matrix(45, 1, -0.1, -50));
 
         r.draw(pos_id, ind_id, rst::Primitive::Triangle);
         cv::Mat image(700, 700, CV_32FC3, r.frame_buffer().data());
@@ -148,7 +142,8 @@ int main(int argc, const char** argv)
         // get_view_matrix(eye_pos) returns a Matrix4f for remove to origin
         r.set_view(get_view_matrix(eye_pos));
         // get_projection_matrix four paremeter eye_fov, aspect_ratio, zNear, zFar
-        r.set_projection(get_projection_matrix(45, 1, 0.1, 50));
+        // 这里修改成了在Z的负半轴
+        r.set_projection(get_projection_matrix(45, 1, -0.1, -50));
 
         r.draw(pos_id, ind_id, rst::Primitive::Triangle);
 
