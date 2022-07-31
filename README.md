@@ -1,7 +1,7 @@
 # Games101HW
 
 __Author: Zhan Zhan__
-__Last update: 22/06/23__
+__Last update: 22/07/31__
 
 
 
@@ -12,6 +12,8 @@ Assignment 0 is updated. 22/05/20
 Assignment 1 is updated. 22/06/23
 
 Assignment 2 is updated. 22/07/14
+
+Assignment 2 is updated. 22/07/31
 
 
 
