@@ -21,7 +21,7 @@ Assignment 5 is updated. 22/08/30
 
 Assignment 6 is updated. 22/09/01
 
-Assignment 6 is updated. 22/09/07
+Assignment 7 is updated. 22/09/07
 
 作业2，3的框架中znear和zfar的值为正数，作业中将其修改为负数和ppt中矩阵n,f对应,相应的会修改depth_buf初始值和比较方法
 
